@@ -11,6 +11,12 @@ spring:
 server:
   port: 8083
 
+
+okta:
+  oauth2:
+    issuer: https://dev-44477325.okta.com/oauth2/default
+    audience: api://default
+
 #eureka:
 #  instance:
 #    prefer-ip-address: true

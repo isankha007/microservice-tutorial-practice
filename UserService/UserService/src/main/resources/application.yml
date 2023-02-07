@@ -17,6 +17,72 @@ spring:
     show-sql: true
     hibernate:
       ddl-auto: update
+  security:
+    oauth2:
+      resourceserver:
+          jwt:
+            issuer-uri: https://dev-44477325.okta.com/oauth2/default
+      client:
+        registration:
+          my-internal-client:
+            provider: okta
+            authorizationGrantType: client_credentials
+            scope: internal
+            client-id: 0oa88509v1adDPz5x5d7
+            client-secret: bwbDrsRI7bDA9rWrSy39ApMsYySYTsV0nIOi12Kf
+        provider:
+          okta:
+            issuerUri: https://dev-44477325.okta.com/oauth2/default
+
+
+
+management:
+  health:
+    circuitbreakers:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      show-details: ALWAYS
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      ratingHotelBreaker:
+        registerHealthIndicator: true
+        eventConsumerBufferSize: 10
+        failureRateThreshold: 50
+        minimumNumberOfCalls: 5
+        waitDurationInOpenState: 6s
+        automaticTransitionFromOpenToHalfOpenEnabled: true
+        permittedNumberOfCallsInHalfOPenState: 3
+        slidingWindowSize: 10
+        slidingWindowType: COUNT_BASED
+
+  retry:
+    instances:
+      ratingHotelService:
+        maxAttempts: 3
+        waitDuration: 5s
+
+  ratelimiter:
+    instances:
+      userRateLimiter:
+        limitForPeriod: 2
+        limitRefreshPeriod: 4s
+        timeoutDuration: 2s
+
+okta:
+  oauth2:
+    issuer: https://dev-44477325.okta.com/oauth2/default
+    audience: api://default
+#    client-id: 0oa88509v1adDPz5x5d7
+#    client-secret: bwbDrsRI7bDA9rWrSy39ApMsYySYTsV0nIOi12Kf
+#    scopes: openid, profile, email, offline_access
+
 #eureka:
 #  instance:
 #    prefer-ip-address: true

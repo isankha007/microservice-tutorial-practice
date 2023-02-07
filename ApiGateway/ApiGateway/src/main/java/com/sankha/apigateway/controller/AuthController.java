@@ -34,6 +34,7 @@ public class AuthController {
         authResponse.setUserId(user.getEmail());
         authResponse.setAccessToken(client.getAccessToken().getTokenValue());
         authResponse.setExpireAt(client.getAccessToken().getExpiresAt().getEpochSecond());
+        authResponse.setRefreshToken(client.getRefreshToken().getTokenValue());
         List<String> authorities = user.getAuthorities().stream().map(grantedAuthority -> {
             return grantedAuthority.getAuthority();
         }).collect(Collectors.toList());
